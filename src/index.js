@@ -3,6 +3,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 
 import User from './resources/user/user.model.js';
+import Post from './resources/post/post.model.js';
 
 const dbURI = process.env.DB_URI;
 const app = express();
@@ -49,5 +50,21 @@ app.post('/users', async (req, res) => {
     res.status(200).json({ data: saveUser });
   } catch (err) {
     res.status(400).json({ data: err });
+  }
+});
+
+app.post('/post/create', async (req, res) => {
+  try {
+    const { media, description } = req.body;
+
+    const newPost = new Post({
+      media,
+      description,
+    });
+
+    const savePost = await newPost.save();
+    res.status(400).json({ data: savePost });
+  } catch (err) {
+    res.status(200).json({ data: err });
   }
 });
