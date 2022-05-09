@@ -24,7 +24,10 @@ const commentSchema = new Schema(
     message: {
       type: String,
     },
-    likes: likeSchema,
+    likes: {
+      type: likeSchema,
+      default: () => ({}),
+    },
   },
   { timestamps: true },
 );
@@ -37,6 +40,7 @@ const postSchema = new Schema(
     createdBy: {
       type: Schema.Types.ObjectId,
       ref: 'user',
+      required: true,
     },
     media: {
       type: [String], // todo: change on real image links
@@ -46,7 +50,10 @@ const postSchema = new Schema(
       type: String,
       default: '',
     },
-    likes: likeSchema, // add this if defaults of nested schema is undefined and couner shows undefind instead of default 0 value : default: () => ({})
+    likes: {
+      type: likeSchema,
+      default: () => ({}), // pass the schema defaults to it's parent defaults
+    },
     comments: {
       type: [commentSchema],
       default: [],
