@@ -53,11 +53,12 @@ app.post('/users', async (req, res) => {
   }
 });
 
-app.post('/post/create', async (req, res) => {
+app.post('/posts/create', async (req, res) => {
   try {
-    const { media, description } = req.body;
+    const { createdBy, media, description } = req.body;
 
     const newPost = new Post({
+      createdBy,
       media,
       description,
     });
@@ -67,4 +68,11 @@ app.post('/post/create', async (req, res) => {
   } catch (err) {
     res.status(200).json({ data: err });
   }
+});
+
+app.get('/posts/:postId', async (req, res) => {
+  const post = await Post.findById(req.params.postId).populate(['createdBy', 'likes']);
+  res.json({
+    data: post,
+  });
 });
