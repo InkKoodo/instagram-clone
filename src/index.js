@@ -2,6 +2,8 @@ import 'dotenv/config';
 import express from 'express';
 import mongoose from 'mongoose';
 
+import User from './resources/user/user.model.js';
+
 const dbURI = process.env.DB_URI;
 const app = express();
 const port = 3000;
@@ -17,10 +19,35 @@ mongoose.connect(dbURI)
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get('/', (req, res) => {
-  res.send('Home');
+// getOne user
+app.get('/users/:userId', async (req, res) => {
+  const user = await User.findById(req.params.userId).populate('followers');
+  res.json({
+    data: user,
+  });
 });
 
-app.get('/:username', (req, res) => {
-  res.send('User page');
+// createUser
+app.post('/users', async (req, res) => {
+  try {
+    const { username, firstName, lastName } = req.body;
+    // check if user exists already
+
+    // crypt password (preSave hook add later to model)
+
+    // save user
+    const newUser = new User({
+      bio: {
+        username,
+        firstName,
+        lastName,
+      },
+    });
+
+    const saveUser = await newUser.save();
+
+    res.status(200).json({ data: saveUser });
+  } catch (err) {
+    res.status(400).json({ data: err });
+  }
 });
