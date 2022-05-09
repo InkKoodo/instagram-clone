@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const { Schema } = mongoose;
+const { Schema, SchemaType, model } = mongoose;
 
 const userSchema = new Schema(
   {
@@ -28,13 +28,18 @@ const userSchema = new Schema(
         default: [''],
       },
     },
+    posts: {
+      type: [SchemaType.ObjectId],
+      ref: 'post',
+      default: [],
+    },
     followers: {
-      type: [mongoose.SchemaTypes.ObjectId],
+      type: [SchemaType.ObjectId],
       ref: 'user',
       default: [],
     },
     following: {
-      type: [mongoose.SchemaType.ObjectId],
+      type: [SchemaType.ObjectId],
       ref: 'user',
       default: [],
     },
@@ -42,6 +47,6 @@ const userSchema = new Schema(
   { timestamps: true },
 );
 
-const User = mongoose.model('user', userSchema);
+const User = model('user', userSchema);
 
 export default User;
