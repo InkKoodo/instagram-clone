@@ -1,7 +1,6 @@
 import mongoose from 'mongoose';
 
-const { Schema, SchemaType, model } = mongoose;
-
+const { Schema, model } = mongoose;
 const userSchema = new Schema(
   {
     bio: {
@@ -29,17 +28,17 @@ const userSchema = new Schema(
       },
     },
     posts: {
-      type: [SchemaType.ObjectId],
+      type: [Schema.Types.ObjectId],
       ref: 'post',
       default: [],
     },
     followers: {
-      type: [SchemaType.ObjectId],
+      type: [Schema.Types.ObjectId],
       ref: 'user',
       default: [],
     },
     following: {
-      type: [SchemaType.ObjectId],
+      type: [Schema.Types.ObjectId],
       ref: 'user',
       default: [],
     },

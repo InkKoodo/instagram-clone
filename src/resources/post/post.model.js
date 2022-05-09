@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const { Schema, SchemaType, model } = mongoose;
+const { Schema, model } = mongoose;
 
 const likeSchema = new Schema({
   likesCounter: {
@@ -8,7 +8,7 @@ const likeSchema = new Schema({
     default: 0,
   },
   likedBy: {
-    type: [SchemaType.ObjectId],
+    type: [Schema.Types.ObjectId],
     ref: 'user',
     default: [],
   },
@@ -17,21 +17,27 @@ const likeSchema = new Schema({
 const commentSchema = new Schema(
   {
     from: {
-      type: SchemaType.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'user',
+      required: true,
     },
     message: {
       type: String,
-      required: true,
     },
     likes: likeSchema,
-    replies: [this],
   },
   { timestamps: true },
 );
+commentSchema.add({
+  replies: [commentSchema],
+});
 
 const postSchema = new Schema(
   {
+    createdBy: {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
+    },
     media: {
       type: [String], // todo: change on real image links
       required: true,
@@ -40,7 +46,7 @@ const postSchema = new Schema(
       type: String,
       default: '',
     },
-    likes: likeSchema,
+    likes: likeSchema, // add this if defaults of nested schema is undefined and couner shows undefind instead of default 0 value : default: () => ({})
     comments: {
       type: [commentSchema],
       default: [],
