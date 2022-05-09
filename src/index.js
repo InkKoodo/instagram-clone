@@ -21,7 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // getOne user
 app.get('/users/:userId', async (req, res) => {
-  const user = await User.findById(req.params.userId).populate('followers');
+  const user = await User.findById(req.params.userId).populate(['followers', 'following']);
   res.json({
     data: user,
   });

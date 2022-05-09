@@ -33,6 +33,11 @@ const userSchema = new Schema(
       ref: 'user',
       default: [],
     },
+    following: {
+      type: [mongoose.SchemaType.ObjectId],
+      ref: 'user',
+      default: [],
+    },
   },
   { timestamps: true },
 );
