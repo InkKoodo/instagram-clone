@@ -52,10 +52,15 @@ const postSchema = new Schema(
     },
     likes: {
       type: likeSchema,
-      default: () => ({}), // pass the schema defaults to it's parent defaults
+      default: () => ({}), // pass the schema defaults to its parent defaults
     },
     comments: {
       type: [commentSchema],
+      default: [],
+    },
+    parentCollections: {
+      type: [Schema.Types.ObjectId],
+      ref: 'userCollection',
       default: [],
     },
   },

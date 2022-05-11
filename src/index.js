@@ -34,7 +34,7 @@ app.post('/users', async (req, res) => {
     const { username, firstName, lastName } = req.body;
     // check if user exists already
 
-    // crypt password (preSave hook add later to model)
+    // crypt password (add preSave hook later to model)
 
     // save user
     const newUser = new User({
