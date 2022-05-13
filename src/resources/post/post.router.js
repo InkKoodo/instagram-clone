@@ -7,16 +7,9 @@ const router = express.Router();
 // /posts/create
 router.post('/create', async (req, res) => {
   try {
-    const { createdBy, media, description } = req.body;
+    const newPost = await Post.create(req.body);
 
-    const newPost = new Post({
-      createdBy,
-      media,
-      description,
-    });
-
-    const savePost = await newPost.save();
-    res.status(400).json({ data: savePost });
+    res.status(400).json({ data: newPost });
   } catch (err) {
     res.status(200).json({ data: err });
   }
