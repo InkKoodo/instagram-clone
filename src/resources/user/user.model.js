@@ -1,3 +1,4 @@
+import bcrypt from 'bcrypt';
 import mongoose from 'mongoose';
 
 const { Schema, model } = mongoose;
@@ -88,6 +89,21 @@ const userSchema = new Schema(
   }, // todo: add conversations model later
   { timestamps: true },
 );
+
+// todo: Resolve eslint issue
+// eslint-disable-next-line consistent-return
+userSchema.pre('save', async function hashPassword(next) {
+  // check if password was changed
+  if (!this.isModified('password')) {
+    return next();
+  }
+
+  try {
+    this.password = await bcrypt.hash(this.password, 12);
+  } catch (e) {
+    return next(e);
+  }
+});
 
 const User = model('user', userSchema);
 
