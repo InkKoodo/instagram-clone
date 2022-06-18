@@ -21,5 +21,5 @@ mongoose.connect(dbURI)
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // Routes
-app.use('/user', userRouter);
-app.use('/post', postRouter);
+app.use('/users', userRouter);
+app.use('/posts', postRouter);
