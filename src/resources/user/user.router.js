@@ -51,4 +51,44 @@ router.route('/:userId')
   // delete user
   .delete();
 
+router.post('/subscribe', async (req, res) => {
+  try {
+    // todo: unsafe operation, change when JWT will be implemented
+    const { subscriptionId, userId } = req.body;
+    // add account to follow
+    await User.findOneAndUpdate(
+      { id: userId },
+      { $addToSet: { subscriptions: subscriptionId } },
+    );
+    // add subscriber to a subscribed account
+    await User.findOneAndUpdate(
+      { id: subscriptionId },
+      { $addToSet: { followers: userId } },
+    );
+    return res.status(200).json({ data: { message: 'successfully subscribed' } });
+  } catch (e) {
+    return res.status(400).json({ error: e });
+  }
+});
+
+router.post('/unsubscribe', async (req, res) => {
+  try {
+    // todo: unsafe operation, change when JWT will be implemented
+    const { subscriptionId, userId } = req.body;
+    // account to unfollow
+    await User.findOneAndUpdate(
+      { id: userId },
+      { $pull: { subscriptions: subscriptionId } },
+    );
+    // remove subscriber
+    await User.findOneAndUpdate(
+      { id: subscriptionId },
+      { $pull: { followers: userId } },
+    );
+    return res.status(200).json({ data: { message: 'successfully unsubscribed' } });
+  } catch (e) {
+    return res.status(400).json({ error: e });
+  }
+});
+
 export default router;
