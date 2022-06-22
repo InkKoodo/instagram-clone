@@ -9,13 +9,9 @@ router.route('/')
   .post(async (req, res) => {
     const { username } = req.body.bio;
     try {
-    // check if user exists already
-      const ifUserExists = await User.findOne({
-        bio: {
-          username,
-        },
-      });
-      if (ifUserExists) {
+      // check if user exists already
+      const user = await User.findOne({ 'bio.username': username });
+      if (user) {
         return res.status(404).json({ errMessage: 'User already exists' });
       }
 
