@@ -16,8 +16,10 @@ router.route('/')
       }
 
       // save user
-      await User.create(req.body);
-      return res.status(200).json({ data: req.body.bio });
+      const newUser = await User.create(req.body);
+      const { _doc } = newUser;
+      const { password, ...responseUser } = _doc;
+      return res.status(200).json({ data: responseUser });
     } catch (e) {
       return res.status(400).json({ error: e });
     }
