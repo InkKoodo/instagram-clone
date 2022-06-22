@@ -37,10 +37,14 @@ router.route('/')
 router.route('/:userId')
   // get User
   .get(async (req, res) => {
-    const user = await User.findById(req.params.userId)
-      .populate(['followers', 'subscriptions']);
+    try {
+      const user = await User.findById(req.params.userId)
+        .populate(['followers', 'subscriptions']);
 
-    res.json({ data: user });
+      res.status(200).json({ data: user });
+    } catch (e) {
+      res.status(400).json({ error: { e } });
+    }
   })
   // update user
   .put()
