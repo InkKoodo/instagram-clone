@@ -38,7 +38,8 @@ router.route('/:userId')
   // get User
   .get(async (req, res) => {
     const user = await User.findById(req.params.userId)
-      .populate(['followers', 'following']);
+      .populate(['followers', 'subscriptions']);
+
     res.json({ data: user });
   })
   // update user
