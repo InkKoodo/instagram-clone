@@ -61,6 +61,7 @@ const userSchema = new Schema(
     password: {
       type: String,
       required: true,
+      select: false,
     },
     posts: {
       type: [Schema.Types.ObjectId],
@@ -72,7 +73,7 @@ const userSchema = new Schema(
       ref: 'user',
       default: [],
     },
-    following: {
+    subscriptions: {
       type: [Schema.Types.ObjectId],
       ref: 'user',
       default: [],
