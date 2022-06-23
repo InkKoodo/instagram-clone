@@ -53,7 +53,6 @@ router.route('/:userId')
     // todo: jwt
     try {
       const deletedUser = await User.findByIdAndDelete(req.params.userId);
-      console.log(deletedUser);
       if (!deletedUser) {
         return res.status(400).json({ error: { message: 'There\'s no such account' } });
       }
