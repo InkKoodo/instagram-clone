@@ -6,20 +6,22 @@ import mongoose from 'mongoose';
 import userRouter from './resources/user/user.router';
 import postRouter from './resources/post/post.router';
 
-const dbURI = process.env.DB_URI;
-const app = express();
-const port = 3000;
+const { DB_URI } = process.env;
+const PORT = 3000;
 
-mongoose.connect(dbURI)
+const app = express();
+
+mongoose.connect(DB_URI)
   .then(() => {
-    app.listen(port, () => {
-      console.log(`listen at port: http://localhost:${port}`);
+    app.listen(PORT, () => {
+      console.log(`listen at port: http://localhost:${PORT}`);
     });
   })
   .catch((err) => console.error(err));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
 // Routes
 app.use('/users', userRouter);
 app.use('/posts', postRouter);
