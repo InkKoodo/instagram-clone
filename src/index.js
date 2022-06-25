@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
 
 import userRouter from './resources/user/user.router';
 import postRouter from './resources/post/post.router';
+import authRouter from './resources/auth/auth.router';
 
 const { DB_URI } = process.env;
 const PORT = 3000;
@@ -23,5 +24,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
+app.use('/auth', authRouter);
 app.use('/users', userRouter);
 app.use('/posts', postRouter);
