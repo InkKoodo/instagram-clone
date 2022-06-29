@@ -55,7 +55,7 @@ router.post('/sign-in', async (req, res) => {
     // send to user new token
     const token = await createToken({ userId: _id });
     await res.set('x-auth-token', token);
-    // redirect to home
+
     return res.status(200).end();
   } catch (e) {
     return res.status(400).json({ error: e });

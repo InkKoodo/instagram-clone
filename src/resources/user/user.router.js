@@ -1,8 +1,11 @@
 import express from 'express';
 
 import User from './user.model';
+import { verifyToken } from '../auth/jwt.actions';
 
 const router = express.Router();
+
+router.use(async (req, res, next) => verifyToken(req, res, next));
 
 router.route('/')
   // get all users
@@ -31,9 +34,10 @@ router.route('/:userId')
   .put()
   // delete user
   .delete(async (req, res) => {
-    // todo: jwt
+    // todo: add "post delete data query" to remove all its user data from other users
     try {
-      const deletedUser = await User.findByIdAndDelete(req.params.userId);
+      const { userId } = req.jwtData;
+      const deletedUser = await User.findByIdAndDelete(userId);
       if (!deletedUser) {
         return res.status(400).json({ error: { message: 'There\'s no such account' } });
       }
@@ -45,16 +49,16 @@ router.route('/:userId')
 
 router.post('/subscribe', async (req, res) => {
   try {
-    // todo: unsafe operation, change when JWT will be implemented
-    const { subscriptionId, userId } = req.body;
+    const { subscriptionId } = req.body;
+    const { userId } = req.jwtData;
     // add account to follow
     await User.findOneAndUpdate(
-      { id: userId },
+      { _id: userId },
       { $addToSet: { subscriptions: subscriptionId } },
     );
     // add subscriber to a subscribed account
     await User.findOneAndUpdate(
-      { id: subscriptionId },
+      { _id: subscriptionId },
       { $addToSet: { followers: userId } },
     );
     return res.status(200).json({ data: { message: 'successfully subscribed' } });
@@ -65,16 +69,18 @@ router.post('/subscribe', async (req, res) => {
 
 router.post('/unsubscribe', async (req, res) => {
   try {
-    // todo: unsafe operation, change when JWT will be implemented
-    const { subscriptionId, userId } = req.body;
-    // account to unfollow
+    const { subscriptionId } = req.body;
+    const { userId } = req.jwtData;
+
+    // remove from account from subscriptions
     await User.findOneAndUpdate(
-      { id: userId },
+      { _id: userId },
       { $pull: { subscriptions: subscriptionId } },
     );
-    // remove subscriber
+
+    // remove subscriber from followers
     await User.findOneAndUpdate(
-      { id: subscriptionId },
+      { _id: subscriptionId },
       { $pull: { followers: userId } },
     );
     return res.status(200).json({ data: { message: 'successfully unsubscribed' } });
