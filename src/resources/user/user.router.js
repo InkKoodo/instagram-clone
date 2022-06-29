@@ -16,6 +16,20 @@ router.route('/')
     } catch (e) {
       return res.status(400).json({ error: e });
     }
+  })
+  // delete user
+  .delete(async (req, res) => {
+    // todo: add "post delete data query" to remove all its user data from other users
+    try {
+      const { userId } = req.jwtData;
+      const deletedUser = await User.findByIdAndDelete(userId);
+      if (!deletedUser) {
+        return res.status(400).json({ error: { message: 'There\'s no such account' } });
+      }
+      return res.status(200).json({ data: { message: 'Account was deleted' } });
+    } catch (e) {
+      return res.status(400).json({ error: e });
+    }
   });
 
 router.route('/:userId')
@@ -31,21 +45,7 @@ router.route('/:userId')
     }
   })
   // update user
-  .put()
-  // delete user
-  .delete(async (req, res) => {
-    // todo: add "post delete data query" to remove all its user data from other users
-    try {
-      const { userId } = req.jwtData;
-      const deletedUser = await User.findByIdAndDelete(userId);
-      if (!deletedUser) {
-        return res.status(400).json({ error: { message: 'There\'s no such account' } });
-      }
-      return res.status(200).json({ data: { message: 'Account was deleted' } });
-    } catch (e) {
-      return res.status(400).json({ error: e });
-    }
-  });
+  .put();
 
 router.post('/subscribe', async (req, res) => {
   try {
