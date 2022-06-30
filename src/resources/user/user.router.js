@@ -1,11 +1,8 @@
 import express from 'express';
 
 import User from './user.model';
-import { verifyToken } from '../auth/jwt.actions';
 
 const router = express.Router();
-
-router.use(async (req, res, next) => verifyToken(req, res, next));
 
 router.route('/')
   // get all users
@@ -19,7 +16,7 @@ router.route('/')
   })
   // delete user
   .delete(async (req, res) => {
-    // todo: add "post delete data query" to remove all its user data from other users
+    // todo: add "post deletion data query" to remove all its user data from other users
     try {
       const { userId } = req.jwtData;
       const deletedUser = await User.findByIdAndDelete(userId);
@@ -72,7 +69,7 @@ router.post('/unsubscribe', async (req, res) => {
     const { subscriptionId } = req.body;
     const { userId } = req.jwtData;
 
-    // remove from account from subscriptions
+    // remove account from subscriptions
     await User.findOneAndUpdate(
       { _id: userId },
       { $pull: { subscriptions: subscriptionId } },

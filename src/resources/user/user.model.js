@@ -79,7 +79,7 @@ const userSchema = new Schema(
     },
     userCollections: {
       type: [Schema.Types.ObjectId],
-      ref: 'userCollection', // todo: create separate userCollection
+      ref: 'user_collection', // todo: create separate userCollection
       default: [],
     },
     userStoryCollections: {
