@@ -16,6 +16,8 @@ export const verifyToken = async (req, res, next) => {
   try {
     // take token
     const bearer = req.get('x-auth-token');
+    if (!bearer) return res.status(400).json({ error: { message: 'Please login' } });
+
     const [, token] = bearer.split(' ');
     // verify & pass token data
     req.jwtData = await jwt.verify(token, JWT_SIGN);
