@@ -1,8 +1,11 @@
 import express from 'express';
 
 import User from './user.model';
+import userCollectionRouter from './userCollection/userCollection.router';
 
 const router = express.Router();
+
+router.use('/collections', userCollectionRouter);
 
 router.route('/')
   // get all users
