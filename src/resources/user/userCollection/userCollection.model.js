@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const { Schema, model } = mongoose;
 
 const userCollectionSchema = new Schema({
-  createdBy: {
+  ownerId: {
     type: Schema.Types.ObjectId,
     ref: 'user',
     required: true,
@@ -24,6 +24,11 @@ const userCollectionSchema = new Schema({
   isPrivate: {
     type: Boolean,
     default: true,
+  },
+  coEditors: {
+    type: [Schema.Types.ObjectId],
+    ref: 'user',
+    default: [],
   },
 }, { timestamps: true });
 
