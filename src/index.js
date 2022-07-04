@@ -3,7 +3,7 @@ import 'dotenv/config';
 import express from 'express';
 import mongoose from 'mongoose';
 
-import { verifyToken } from './resources/auth/jwt.actions';
+import { verifyToken } from './resources/auth/jwt.controllers';
 
 import userRouter from './resources/user/user.router';
 import postRouter from './resources/post/post.router';
@@ -24,9 +24,10 @@ mongoose.connect(DB_URI)
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(async (req, res, next) => verifyToken(req, res, next));
 
 // Routes
 app.use('/auth', authRouter);
+
+app.use((req, res, next) => verifyToken(req, res, next));
 app.use('/users', userRouter);
 app.use('/posts', postRouter);

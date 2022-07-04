@@ -18,9 +18,7 @@ router.post('/create', async (req, res) => {
 // /posts/:postId
 router.get('/:postId', async (req, res) => {
   const post = await Post.findById(req.params.postId).populate(['createdBy', 'likes']);
-  res.json({
-    data: post,
-  });
+  res.json({ data: post });
 });
 
 export default router;
