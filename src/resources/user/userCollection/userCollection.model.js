@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const { Schema, model } = mongoose;
 
 const userCollectionSchema = new Schema({
-  ownerId: {
+  owner: {
     type: Schema.Types.ObjectId,
     ref: 'user',
     required: true,
