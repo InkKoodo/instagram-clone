@@ -33,20 +33,21 @@ export const verifyUser = async (req, res) => {
 
   try {
     // check user's existence
-    const user = await User.findOne({ 'bio.username': username });
+    const user = await User.findOne({ 'bio.username': username }).select('+password');
+    const { password: hashPassword, _id } = user;
+
     if (!user) {
       return res.status(400).json(
-        { error: { message: 'Something went wrong, please try again' } },
+        { error: { message: 'Ether name or password were incorrect, please try again' } },
       );
     }
 
-    const { password: hashPassword, _id } = user;
     // validate received password
     const isPasswordValid = await bcrypt.compare(password, hashPassword);
     // if incorrect - return
     if (!isPasswordValid) {
       return res.status(400).json(
-        { error: { message: 'Something went wrong, please try again' } },
+        { error: { message: 'Ether name or password were incorrect, please try again' } },
       );
     }
     // send to user new token
