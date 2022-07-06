@@ -4,7 +4,7 @@ import Post from './post.model';
 
 const router = express.Router();
 
-// /posts/create
+// create Post
 router.post('/create', async (req, res) => {
   try {
     const newPost = await Post.create(req.body);
@@ -15,9 +15,9 @@ router.post('/create', async (req, res) => {
   }
 });
 
-// /posts/:postId
-router.get('/:postId', async (req, res) => {
-  const post = await Post.findById(req.params.postId).populate(['createdBy', 'likes']);
+// get Post by ID
+router.get('/:id', async (req, res) => {
+  const post = await Post.findById(req.params.id).populate(['createdBy', 'likes']);
   res.json({ data: post });
 });
 
