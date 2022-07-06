@@ -52,13 +52,13 @@ router.post('/subscribe', async (req, res) => {
     const { subscriptionId } = req.body;
     const { userId } = req.jwtData;
     // add account to follow
-    await User.findOneAndUpdate(
-      { _id: userId },
+    await User.findByIdAndUpdate(
+      userId,
       { $addToSet: { subscriptions: subscriptionId } },
     );
     // add subscriber to a subscribed account
-    await User.findOneAndUpdate(
-      { _id: subscriptionId },
+    await User.findByIdAndUpdate(
+      subscriptionId,
       { $addToSet: { followers: userId } },
     );
     return res.status(200).json({ data: { message: 'successfully subscribed' } });
@@ -73,14 +73,14 @@ router.post('/unsubscribe', async (req, res) => {
     const { userId } = req.jwtData;
 
     // remove account from subscriptions
-    await User.findOneAndUpdate(
-      { _id: userId },
+    await User.findByIdAndUpdate(
+      userId,
       { $pull: { subscriptions: subscriptionId } },
     );
 
     // remove subscriber from followers
-    await User.findOneAndUpdate(
-      { _id: subscriptionId },
+    await User.findByIdAndUpdate(
+      subscriptionId,
       { $pull: { followers: userId } },
     );
     return res.status(200).json({ data: { message: 'successfully unsubscribed' } });
