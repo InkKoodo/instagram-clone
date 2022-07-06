@@ -17,6 +17,26 @@ router.route('/')
       return res.status(400).json({ error: e });
     }
   })
+  // update user's bio
+  .put(async (req, res) => {
+    try {
+      const { userId } = req.jwtData;
+      const { bio } = await User.findById(userId);
+      const updatedUser = await User.findByIdAndUpdate(
+        userId,
+        {
+          bio: {
+            ...bio,
+            ...req.body,
+          },
+        },
+        { new: true },
+      );
+      return res.status(200).json({ data: { updatedUser } });
+    } catch (e) {
+      return res.status(400).json({ error: e });
+    }
+  })
   // delete user
   .delete(async (req, res) => {
     // todo: add "post deletion data query" to remove all its user data from other users
@@ -32,20 +52,18 @@ router.route('/')
     }
   });
 
-router.route('/:userId')
+router.route('/:id')
   // get User
   .get(async (req, res) => {
     try {
-      const user = await User.findById(req.params.userId)
+      const user = await User.findById(req.params.id)
         .populate(['followers', 'subscriptions']);
 
       res.status(200).json({ data: user });
     } catch (e) {
       res.status(400).json({ error: e });
     }
-  })
-  // update user
-  .put();
+  });
 
 router.post('/subscribe', async (req, res) => {
   try {

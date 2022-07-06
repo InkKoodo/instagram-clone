@@ -54,8 +54,8 @@ const userSchema = new Schema(
         default: '',
       },
       profileDescription: {
-        type: [String],
-        default: [''],
+        type: String,
+        default: '',
       },
     },
     password: {
@@ -80,7 +80,7 @@ const userSchema = new Schema(
     },
     userCollections: {
       type: [Schema.Types.ObjectId],
-      ref: 'user_collection', // todo: create separate userCollection
+      ref: 'user_collection',
       default: [],
     },
     userStoryCollections: {
