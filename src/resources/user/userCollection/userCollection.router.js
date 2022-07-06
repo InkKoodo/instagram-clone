@@ -47,7 +47,17 @@ router.route('/:id')
   })
 
   // get collection by its id
-  .get(async (req, res) => res.send('user collections'))
+  .get(async (req, res) => {
+    try {
+      const collectionId = req.params.id;
+      const collection = await UserCollection.findById(collectionId)
+        .populate(['media', 'coEditors', 'owner']);
+
+      return res.status(200).json({ data: collection });
+    } catch (e) {
+      return res.status(400).json({ error: e });
+    }
+  })
 
   // delete collection
   .delete(async (req, res) => res.send('user collections'));
