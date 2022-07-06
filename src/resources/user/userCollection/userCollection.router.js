@@ -1,6 +1,7 @@
 import express from 'express';
 
 import UserCollection from './userCollection.model';
+import User from '../user.model';
 
 const router = express.Router();
 
@@ -13,6 +14,14 @@ router.route('/')
         owner: userId,
         ...req.body,
       });
+      // update user with a new collection id
+      const { _id } = newCollection;
+      await User.findByIdAndUpdate(
+        userId,
+        { $addToSet: { userCollections: _id } },
+        { new: true },
+      );
+
       return res.status(200).json({ data: newCollection });
     } catch (e) {
       return res.status(400).json({ error: e });
@@ -21,7 +30,7 @@ router.route('/')
 
 router.route('/:id')
 
-  // edit collection
+  // update collection
   .put(async (req, res) => {
     try {
       const collectionId = req.params.id;
