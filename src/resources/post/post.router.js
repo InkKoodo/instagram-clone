@@ -43,9 +43,13 @@ router.route('/')
 router.route('/:id')
   // get Post by ID
   .get(async (req, res) => {
-    const post = await Post.findById(req.params.id)
-      .populate(['createdBy', 'likes', 'parentCollections']);
-    res.json({ data: post });
+    try {
+      const post = await Post.findById(req.params.id)
+        .populate(['createdBy', 'parentCollections']);
+      return res.status(200).json({ data: post });
+    } catch (e) {
+      return res.status(400).json({ error: e });
+    }
   });
 // update Post
 
