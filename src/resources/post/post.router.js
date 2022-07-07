@@ -15,19 +15,30 @@ router.route('/')
         ...req.body,
       });
       const { _id } = newPost;
+
       // add post to User
       await User.findByIdAndUpdate(
         userId,
         { $addToSet: { posts: _id } },
       );
 
-      res.status(200).json({ data: newPost });
+      return res.status(200).json({ data: newPost });
     } catch (e) {
-      res.status(400).json({ data: e });
+      return res.status(400).json({ error: e });
+    }
+  })
+
+  // get all user's Posts
+  .get(async (req, res) => {
+    try {
+      const { userId } = req.jwtData;
+      const { posts } = await User.findById(userId).populate('posts');
+
+      return res.status(200).json({ data: posts });
+    } catch (e) {
+      return res.status(400).json({ error: e });
     }
   });
-
-// get all user's Posts
 
 router.route('/:id')
   // get Post by ID
