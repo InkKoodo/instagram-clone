@@ -79,7 +79,7 @@ router.post('/subscribe', async (req, res) => {
       subscriptionId,
       { $addToSet: { followers: userId } },
     );
-    return res.status(200).json({ data: { message: 'successfully subscribed' } });
+    return res.status(200).json({ data: { message: 'Successfully subscribed' } });
   } catch (e) {
     return res.status(400).json({ error: e });
   }
@@ -101,7 +101,7 @@ router.post('/unsubscribe', async (req, res) => {
       subscriptionId,
       { $pull: { followers: userId } },
     );
-    return res.status(200).json({ data: { message: 'successfully unsubscribed' } });
+    return res.status(200).json({ data: { message: 'Successfully unsubscribed' } });
   } catch (e) {
     return res.status(400).json({ error: e });
   }

@@ -6,7 +6,7 @@ export const createToken = async (payload) => {
   const token = await jwt.sign(
     payload,
     JWT_SIGN,
-    { expiresIn: '100d' }, // todo: change to normal values after development
+    { expiresIn: '10d' }, // todo: change to normal values after development
   );
 
   return `Bearer ${token}`;

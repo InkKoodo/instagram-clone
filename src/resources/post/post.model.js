@@ -32,7 +32,10 @@ const commentSchema = new Schema(
   { timestamps: true },
 );
 commentSchema.add({
-  replies: [commentSchema],
+  replies: {
+    type: [commentSchema],
+    default: [],
+  },
 });
 
 const postSchema = new Schema(
