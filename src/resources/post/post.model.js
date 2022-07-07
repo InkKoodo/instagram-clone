@@ -12,7 +12,7 @@ const likeSchema = new Schema({
     ref: 'user',
     default: [],
   },
-});
+}, { _id: false });
 
 const commentSchema = new Schema(
   {
@@ -63,7 +63,7 @@ const postSchema = new Schema(
     },
     parentCollections: {
       type: [Schema.Types.ObjectId],
-      ref: 'userCollection',
+      ref: 'user_collection',
       default: [],
     },
   },
