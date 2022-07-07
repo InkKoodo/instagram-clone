@@ -46,6 +46,9 @@ router.route('/:id')
     try {
       const post = await Post.findById(req.params.id)
         .populate(['createdBy', 'parentCollections']);
+
+      if (!post) return res.status(400).json({ error: { message: 'This post doesn\'t exists anymore' } });
+
       return res.status(200).json({ data: post });
     } catch (e) {
       return res.status(400).json({ error: e });
