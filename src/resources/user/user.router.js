@@ -17,6 +17,7 @@ router.route('/')
       return res.status(400).json({ error: e });
     }
   })
+
   // update user's bio
   .put(async (req, res) => {
     try {
@@ -37,6 +38,7 @@ router.route('/')
       return res.status(400).json({ error: e });
     }
   })
+
   // delete user
   .delete(async (req, res) => {
     // todo: add "post deletion data query" to remove all its user data from other users
@@ -69,11 +71,17 @@ router.post('/subscribe', async (req, res) => {
   try {
     const { subscriptionId } = req.body;
     const { userId } = req.jwtData;
+
+    // check if user with this id exists
+    const isUserExists = await User.findById(req.params.id);
+    if (!isUserExists) return res.status(400).json({ error: { message: 'There\'s no such user' } });
+
     // add account to follow
     await User.findByIdAndUpdate(
       userId,
       { $addToSet: { subscriptions: subscriptionId } },
     );
+
     // add subscriber to a subscribed account
     await User.findByIdAndUpdate(
       subscriptionId,
