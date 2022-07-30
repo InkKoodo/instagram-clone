@@ -1,59 +1,19 @@
 import express from 'express';
 
-import Post from './post.model';
-import User from '../user/user.model';
+import { createPost, getAllPosts, getPost } from './post.controllers';
 
 const router = express.Router();
 
 router.route('/')
   // create a Post
-  .post(async (req, res) => {
-    try {
-      const { userId } = req.jwtData;
-      const newPost = await Post.create({
-        createdBy: userId,
-        ...req.body,
-      });
-      const { _id } = newPost;
-
-      // add post to User
-      await User.findByIdAndUpdate(
-        userId,
-        { $addToSet: { posts: _id } },
-      );
-
-      return res.status(200).json({ data: newPost });
-    } catch (e) {
-      return res.status(400).json({ error: e });
-    }
-  })
+  .post((req, res) => createPost(req, res))
 
   // get all user's Posts
-  .get(async (req, res) => {
-    try {
-      const { userId } = req.jwtData;
-      const { posts } = await User.findById(userId).populate('posts');
-
-      return res.status(200).json({ data: posts });
-    } catch (e) {
-      return res.status(400).json({ error: e });
-    }
-  });
+  .get((req, res) => getAllPosts(req, res));
 
 router.route('/:id')
   // get Post by ID
-  .get(async (req, res) => {
-    try {
-      const post = await Post.findById(req.params.id)
-        .populate(['createdBy', 'parentCollections']);
-
-      if (!post) return res.status(400).json({ error: { message: 'This post doesn\'t exists anymore' } });
-
-      return res.status(200).json({ data: post });
-    } catch (e) {
-      return res.status(400).json({ error: e });
-    }
-  });
+  .get((req, res) => getPost(req, res));
 // update Post
 
 // delete Post
