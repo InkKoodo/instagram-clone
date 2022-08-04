@@ -5,15 +5,11 @@ import { createPost, getAllPosts, getPost } from './post.controllers';
 const router = express.Router();
 
 router.route('/')
-  // create a Post
-  .post((req, res) => createPost(req, res))
-
-  // get all user's Posts
-  .get((req, res) => getAllPosts(req, res));
+  .post(createPost)
+  .get(getAllPosts);
 
 router.route('/:id')
-  // get Post by ID
-  .get((req, res) => getPost(req, res));
+  .get(getPost);
 // update Post
 
 // delete Post

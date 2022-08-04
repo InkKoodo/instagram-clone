@@ -11,21 +11,15 @@ const router = express.Router();
 router.use('/collections', userCollectionRouter);
 
 router.route('/')
-  // get all users
-  .get((req, res) => getAllUsers(req, res))
-
-  // update user's bio
-  .put((req, res) => updateBio(req, res))
-
-  // delete user
-  .delete((req, res) => deleteUser(req, res));
+  .get(getAllUsers)
+  .put(updateBio)
+  .delete(deleteUser);
 
 router.route('/:id')
-  // get User
-  .get((req, res) => getUser(req, res));
+  .get(getUser);
 
-router.post('/subscribe', (req, res) => subscribe(req, res));
+router.post('/subscribe', subscribe);
 
-router.post('/unsubscribe', (req, res) => unsubscribe(req, res));
+router.post('/unsubscribe', unsubscribe);
 
 export default router;

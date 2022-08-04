@@ -5,19 +5,12 @@ import { createCollection, getCollection, updateCollection } from './userCollect
 const router = express.Router();
 
 router.route('/')
-  // create collection
-  .post((req, res) => createCollection(req, res));
+  .post(createCollection);
 
 router.route('/:id')
-
-  // update collection
-  .put((req, res) => updateCollection(req, res))
-
-  // get collection by its id
-  .get((req, res) => getCollection(req, res))
-
-  // delete collection
-  .delete(async (req, res) => res.send('user collections'));
+  .put(updateCollection)
+  .get(getCollection)
+  .delete(async (req, res) => res.send('add delete collection'));
 
 // add to collection
 
