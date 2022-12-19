@@ -15,11 +15,11 @@ router.route('/')
   .put(updateBio)
   .delete(deleteUser);
 
-router.route('/:id')
-  .get(getUser);
-
 router.post('/subscribe', subscribe);
 
 router.post('/unsubscribe', unsubscribe);
+
+router.route('/:id')
+  .get(getUser);
 
 export default router;
